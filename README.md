@@ -22,7 +22,7 @@ When new cells are born or surrounding territories change, neighboring factions 
   - **AutoReset:** Automatically generates a new random grid when an infinite loop or static state is detected.
   - **AutoPause:** Pauses the simulation automatically upon loop detection.
 - **Dynamic Configuration:** Adjust grid dimensions, number of factions ($1$ to $24$), simulation speed (FPS), and display scaling on the fly via pop-up GUI dialogs.
-- **Optimized Performance:** Vectorized array operations powered by `NumPy` for smooth rendering and fast logic execution.
+- **Optimized Performance:** Vectorized array operations powered by `NumPy` for smooth rendering and fast logic execution. On a 256x256 grid with 24 factions, it uses only a few dozen MB of memory with low CPU usage, allowing it to run smoothly and consistently.
 
 ## How It Works
 
