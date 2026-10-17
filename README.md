@@ -5,13 +5,13 @@
 
 An interactive, multi-faction extension of Conway's Game of Life built with Python, Pygame, NumPy, and Tkinter. In addition to desktop use, this program has also been optimized for live streaming and is suitable for overlaying on the screen.
 
-![Demo GIF](demo.gif)
-
 ## Overview
 
 **Colorful Game of Life** reimagines John Conway's classic cellular automaton by adding **faction competition and territory control**. While cell survival and birth strictly adhere to standard Conway rules ($2$ or $3$ neighbors to survive, $3$ to reproduce), each cell belongs to a specific faction represented by vibrant HSV color palettes.
 
 When new cells are born or surrounding territories change, neighboring factions compete for dominance based on local majority voting.
+
+![Demo GIF](demo.gif)
 
 ## Features
 
