@@ -87,13 +87,13 @@ python colorful_game_of_life.py
 | **`H`** | Show help dialog |
 | **`I`** | Display current simulation info |
 
-## Insert into the live stream screen
+## Live Streaming & Screen Overlay Setup
 
-To insert this program into a live stream or recording, simply follow these steps:
+To set up this program as a screen overlay for live streams or video recording (e.g., in OBS Studio):
 
-- Press `W` to switch the window to unscaled mode so it can be adjusted in the streaming software.
-- Minimize the window, then select it in the streaming software to insert it.
-- Set the scaling algorithm for this window in the streaming software to "Nearest Neighbor".
+1. Press **`W`** to switch the window to unscaled mode for clean pixel capture.
+2. Add a **Window Capture** source in your streaming software and select the app window.
+3. Set the scale filtering for the source to **Nearest Neighbor** to preserve sharp pixel graphics.
 
 ## License
 
