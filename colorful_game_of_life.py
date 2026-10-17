@@ -10,7 +10,7 @@ root.withdraw()
 # --- Configuration Parameters ---
 COLOR_BG = np.array([16, 16, 16], dtype=np.uint8)
 PAUSE_FPS = 24
-DENSITY = 1 / 3
+DENSITY = 3 / 8
 S, V = 0.6, 0.9
 
 # Display help dialog with keybindings and controls.
