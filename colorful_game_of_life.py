@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 import numpy as np
 import pygame
+import zlib
 
 root = tk.Tk()
 root.withdraw()
@@ -229,10 +230,9 @@ def main() -> None:
                             )
 
                     case pygame.K_p:  # Save screenshot
-                        pygame.image.save(screen, "screenshot.png")
-                        messagebox.showinfo(
-                            "Screenshot", "You have taken a screenshot"
-                        )
+                        filename : str = f"screenshot_{zlib.crc32(np.packbits(grid).tobytes()):08x}.png"
+                        pygame.image.save(screen, filename)
+                        messagebox.showinfo(filename, "You have taken a screenshot")
 
                     case pygame.K_w: # Toggle display scaling mode
                         is_scaled = not is_scaled
