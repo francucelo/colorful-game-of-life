@@ -123,7 +123,7 @@ def main() -> None:
     pygame.display.set_caption(f"Colorful Game of Life {width}x{height}")
     clock = pygame.time.Clock()
 
-    num_factions: int = 6
+    num_factions: int = 8
     palette = create_palette(num_factions)
 
     grid, factions = random_grid(width, height, num_factions)
