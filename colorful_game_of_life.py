@@ -28,6 +28,7 @@ def show_help() -> None:
         "Y = Change Factions Number\n"
         "P = Screenshot\n"
         "W = Switch screen mode\n"
+        "F11 = Toggle Fullscreen\n"
         "Space = Pause\n"
         "Enter = Next generation\n"
         "Mouse Left = Spawn cell\n"
