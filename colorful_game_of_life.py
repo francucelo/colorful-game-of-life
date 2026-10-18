@@ -245,6 +245,12 @@ def main() -> None:
                             else pygame.display.set_mode((width, height))
                         )
 
+                    case pygame.K_F11: # Toggle fullscreen
+                        if not (screen.get_flags() & pygame.FULLSCREEN):
+                            is_scaled = True
+                            screen = pygame.display.set_mode((width, height), pygame.RESIZABLE | pygame.SCALED)
+                        pygame.display.toggle_fullscreen()
+
                     case pygame.K_h: # Show help menu
                         show_help()
 
