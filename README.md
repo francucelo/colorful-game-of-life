@@ -24,6 +24,8 @@ When new cells are born or surrounding territories change, neighboring factions 
 - **Dynamic Configuration:** Adjust grid dimensions, number of factions ($1$ to $24$), simulation speed (FPS), and display scaling on the fly via pop-up GUI dialogs.
 - **Optimized Performance:** Vectorized array operations powered by `NumPy` for smooth rendering and fast logic execution. On a 256x256 grid with 24 factions, it uses only a few dozen MB of memory with low CPU usage, allowing it to run smoothly and consistently.
 
+![Screenshot](screenshot.png)
+
 ## How It Works
 
 1. **Life & Death (Conway Rules):**
@@ -64,6 +66,14 @@ pip install pygame numpy
 python colorful_game_of_life.py
 ```
 
+## Live Streaming & Screen Overlay Setup
+
+To set up this program as a screen overlay for live streams or video recording (e.g., in OBS Studio):
+
+1. Press **`W`** to switch the window to unscaled mode for clean pixel capture.
+2. Add a **Window Capture** source in your streaming software and select the app window.
+3. Set the scale filtering for the source to **Nearest Neighbor** to preserve sharp pixel graphics.
+
 ## Controls & Keybindings
 
 | Key / Input | Action |
@@ -87,14 +97,6 @@ python colorful_game_of_life.py
 | **`F11`**| Toggle Fullcreen |
 | **`H`** | Show help dialog |
 | **`I`** | Display current simulation info |
-
-## Live Streaming & Screen Overlay Setup
-
-To set up this program as a screen overlay for live streams or video recording (e.g., in OBS Studio):
-
-1. Press **`W`** to switch the window to unscaled mode for clean pixel capture.
-2. Add a **Window Capture** source in your streaming software and select the app window.
-3. Set the scale filtering for the source to **Nearest Neighbor** to preserve sharp pixel graphics.
 
 ## License
 
