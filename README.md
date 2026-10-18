@@ -84,6 +84,7 @@ python colorful_game_of_life.py
 | **`Y`** | Change number of active factions ($1$ to $24$) |
 | **`P`** | Save screenshot (`screenshot.png`) |
 | **`W`** | Toggle window display scaling (`SCALED` mode) |
+| **`F11`**| Toggle Fullcreen |
 | **`H`** | Show help dialog |
 | **`I`** | Display current simulation info |
 
