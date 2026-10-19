@@ -1,6 +1,7 @@
 import colorsys
 import tkinter as tk
 from tkinter import messagebox, simpledialog
+from numba import njit
 import numpy as np
 import pygame
 import zlib
@@ -59,53 +60,71 @@ def random_grid(width: int, height: int, num_factions: int) -> tuple[np.ndarray,
     return grid, factions
 
 # Update grid state and faction ownership for the next generation based on Conway's rules.
+@njit(fastmath=True)
 def update_grid(grid: np.ndarray, factions: np.ndarray, num_factions: int) -> tuple[np.ndarray, np.ndarray]:
-    # Periodic boundary padding: Must cast to uint8 to prevent bitwise OR behavior with boolean arrays
-    padded = np.pad(grid.astype(np.uint8), pad_width=1, mode='wrap')
-    neighbors_count = (
-        padded[:-2, :-2] + padded[:-2, 1:-1] + padded[:-2, 2:] +
-        padded[1:-1, :-2]                     + padded[1:-1, 2:] +
-        padded[2:, :-2]  + padded[2:, 1:-1]  + padded[2:, 2:]
-    )
+    width, height = grid.shape
+    next_grid = np.zeros((width, height), dtype=np.bool_)
+    next_factions = np.zeros((width, height), dtype=np.int16)
 
-    # Conway's classic life/death rules
-    next_grid = (neighbors_count == 3) | (grid & (neighbors_count == 2))
+    # Relative offset coordinates of 8 neighbors
+    dx = (-1, -1, -1, 0, 0, 1, 1, 1)
+    dy = (-1, 0, 1, -1, 1, -1, 0, 1)
 
-    next_factions = np.zeros_like(factions)
+    for x in range(width):
+        for y in range(height):
+            alive_neighbors = 0
+            # Used to count the votes for each faction in the area (1 to num_factions)
+            faction_counts = np.zeros(num_factions + 1, dtype=np.int32)
 
-    # Calculate faction assignment only for surviving/newborn cells in the next frame
-    padded_factions = np.pad(factions, pad_width=1, mode="wrap")
+            for k in range(8):
+                # Wrap-around boundary
+                nx = (x + dx[k]) % width
+                ny = (y + dy[k]) % height
 
-    # Extract neighbor faction IDs for all K surviving cells, shape: (K, 8)
-    surviving_neighbors = np.stack(
-        [
-            padded_factions[:-2, :-2][next_grid],
-            padded_factions[:-2, 1:-1][next_grid],
-            padded_factions[:-2, 2:][next_grid],
-            padded_factions[1:-1, :-2][next_grid],
-            padded_factions[1:-1, 2:][next_grid],
-            padded_factions[2:, :-2][next_grid],
-            padded_factions[2:, 1:-1][next_grid],
-            padded_factions[2:, 2:][next_grid],
-        ],
-        axis=1,
-    )
+                if grid[nx, ny]:
+                    alive_neighbors += 1
+                    f_id = factions[nx, ny]
+                    if f_id > 0:
+                        faction_counts[f_id] += 1
 
-    # Broadcast comparison to calculate vote counts for each faction, shape: (K, N)
-    faction_ids = np.arange(1, num_factions + 1)
-    counts = (surviving_neighbors[:, :, None] == faction_ids).sum(axis=1)
+            # Classic Life-and-Death Rules
+            is_alive = grid[x, y]
+            will_live = (alive_neighbors == 3) or (is_alive and alive_neighbors == 2)
 
-    # Add small random noise to break ties
-    noise = np.random.uniform(0.0, 0.01, size=counts.shape)
-    winning_factions = np.argmax(counts + noise, axis=1) + 1
+            if will_live:
+                next_grid[x, y] = True
 
-    # Handle isolated cells: retain original faction if no neighbors are present
-    max_counts = counts.max(axis=1)
-    orig_factions = factions[next_grid]
-    final_factions = np.where(max_counts > 0, winning_factions, orig_factions)
+                # Find the faction with the highest number of nearby units
+                max_count = 0
+                for f in range(1, num_factions + 1):
+                    if faction_counts[f] > max_count:
+                        max_count = faction_counts[f]
 
-    # Map back to the next generation faction matrix
-    next_factions[next_grid] = final_factions
+                if max_count == 0:
+                    # Isolated cells retain their original faction.
+                    next_factions[x, y] = factions[x, y]
+                else:
+                    # Count the number of factions with the highest number
+                    candidate_count = 0
+                    for f in range(1, num_factions + 1):
+                        if faction_counts[f] == max_count:
+                            candidate_count += 1
+
+                    if candidate_count == 1:
+                        for f in range(1, num_factions + 1):
+                            if faction_counts[f] == max_count:
+                                next_factions[x, y] = f
+                                break
+                    else:
+                        # In the event of a tie, a winner will be selected at random.
+                        r = np.random.randint(0, candidate_count)
+                        curr = 0
+                        for f in range(1, num_factions + 1):
+                            if faction_counts[f] == max_count:
+                                if curr == r:
+                                    next_factions[x, y] = f
+                                    break
+                                curr += 1
 
     return next_grid, next_factions
 
