@@ -1,7 +1,7 @@
 import colorsys
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-from numba import njit
+from numba import njit, prange
 import numpy as np
 import pygame
 import zlib
@@ -70,7 +70,7 @@ def render_numba(factions: np.ndarray, palette_32: np.ndarray, out_pixels: np.nd
             out_pixels[x, y] = palette_32[factions[x, y]]
 
 # Update grid state and faction ownership for the next generation based on Conway's rules.
-@njit(fastmath=True)
+@njit(parallel=True, fastmath=True)
 def update_grid(
     grid: np.ndarray,
     factions: np.ndarray,
@@ -84,10 +84,9 @@ def update_grid(
     dx = (-1, -1, -1, 0, 0, 1, 1, 1)
     dy = (-1, 0, 1, -1, 1, -1, 0, 1)
 
-    # Used to count the votes for each faction in the area (1 to num_factions)
-    faction_counts = np.zeros(num_factions + 1, dtype=np.int32)
-
     for x in range(width):
+        # Used to count the votes for each faction in the area (1 to num_factions)
+        faction_counts = np.zeros(num_factions + 1, dtype=np.int32)
         for y in range(height):
             alive_neighbors = 0
             faction_counts.fill(0)
