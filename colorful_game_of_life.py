@@ -161,6 +161,9 @@ def main() -> None:
 
     grid_surface = pygame.Surface((width, height))
 
+    # Numba Warm-up
+    _ = update_grid(grid, factions, num_factions)
+
     while running:
         # Event processing loop
         for event in pygame.event.get():
