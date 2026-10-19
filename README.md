@@ -22,7 +22,7 @@ When new cells are born or surrounding territories change, neighboring factions 
   - **AutoReset:** Automatically generates a new random grid when an infinite loop or static state is detected.
   - **AutoPause:** Pauses the simulation automatically upon loop detection.
 - **Dynamic Configuration:** Adjust grid dimensions, number of factions ($1$ to $24$, $6$ by default), simulation speed (FPS), and display scaling on the fly via pop-up GUI dialogs.
-- **Optimized Performance:** Vectorized array operations powered by `NumPy` for smooth rendering and fast logic execution. On a 256x256 grid with 24 factions, it uses only a few dozen MB of memory with low CPU usage, allowing it to run smoothly and consistently.
+- **High-Performance Rendering:** Vectorized array manipulation powered by NumPy and Numba ensures silky-smooth rendering with low CPU and memory overhead even on large grids.
 
 ## How It Works
 
@@ -35,7 +35,7 @@ When new cells are born or surrounding territories change, neighboring factions 
 2. **Faction Inheritence & Territorial Control:**
    - For every surviving or newly born cell, neighboring cells cast votes based on their faction IDs.
    - The faction with the highest neighbor count claims the cell.
-   - Tie-breaking is resolved using small random noise to ensure dynamic territory shifts.
+   - Tie-breaking is resolved randomly among top contenders to ensure dynamic territory shifts.
 
 ## Prerequisites
 
@@ -43,6 +43,7 @@ When new cells are born or surrounding territories change, neighboring factions 
 - Required Python libraries:
   - `pygame`
   - `numpy`
+  - `numba`
   - `tkinter` (usually bundled with standard Python distributions)
 
 ## Getting Started
@@ -56,7 +57,7 @@ Or download directly `colorful_game_of_life.py`.
 
 ### 2. Install dependencies
 ```bash
-pip install pygame numpy
+pip install pygame numpy numba
 ```
 
 ### 3. Run the application
