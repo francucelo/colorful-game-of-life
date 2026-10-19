@@ -84,7 +84,7 @@ def update_grid(
     dx = (-1, -1, -1, 0, 0, 1, 1, 1)
     dy = (-1, 0, 1, -1, 1, -1, 0, 1)
 
-    for x in range(width):
+    for x in prange(width):
         # Used to count the votes for each faction in the area (1 to num_factions)
         faction_counts = np.zeros(num_factions + 1, dtype=np.int32)
         for y in range(height):
